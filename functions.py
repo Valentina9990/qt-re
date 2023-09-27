@@ -184,28 +184,28 @@ class MainWindow(QMainWindow):
         name_player = self.input_delete.text().upper()
         name_player = str(name_player)
         player = self.database.search_player(name_player)
-        # if not validate_name(name_player):
-        #     self.signal_delete.setText("Error: Invalid input")
-        self.table_delete.setRowCount(len(player))
-        if len(player) == 0:
-            self.signal_delete.setText("Error: Player not found")
+        if validate_name(name_player):
+            
+            self.table_delete.setRowCount(len(player))
+            if len(player) == 0:
+                self.signal_delete.setText("Error: Player not found")
+            else:
+                self.signal_delete.setText("Player found")
+            table_row = 0
+            for row in player:
+                self.player_to_delete = row[1]
+                self.table_delete.setItem(table_row, 0, QtWidgets.QTableWidgetItem(row[0]))
+                self.table_delete.setItem(table_row, 1, QtWidgets.QTableWidgetItem(row[1]))
+                self.table_delete.setItem(table_row, 2, QtWidgets.QTableWidgetItem(row[2]))
+                self.table_delete.setItem(table_row, 3, QtWidgets.QTableWidgetItem(row[3]))
+                self.table_delete.setItem(table_row, 4, QtWidgets.QTableWidgetItem(row[4]))
+                table_row += 1
         else:
-            self.signal_delete.setText("Player found")
-        table_row = 0
-        for row in player:
-            self.player_to_delete = row[1]
-            self.table_delete.setItem(table_row, 0, QtWidgets.QTableWidgetItem(row[0]))
-            self.table_delete.setItem(table_row, 1, QtWidgets.QTableWidgetItem(row[1]))
-            self.table_delete.setItem(table_row, 2, QtWidgets.QTableWidgetItem(row[2]))
-            self.table_delete.setItem(table_row, 3, QtWidgets.QTableWidgetItem(row[3]))
-            self.table_delete.setItem(table_row, 4, QtWidgets.QTableWidgetItem(row[4]))
-            table_row += 1
+            self.signal_delete.setText("Error: Invalid input")
             
             
     def delete_player_name(self):
-        print(self.player_to_delete)
         self.row_flag = self.table_delete.currentRow()
-        print(self.row_flag)
         if self.row_flag == -1:
             self.table_delete.removeRow(0)
             self.database.delete_player(self.player_to_delete)
